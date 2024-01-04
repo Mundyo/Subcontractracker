@@ -1,5 +1,6 @@
 import {BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Form from './Component/Form';
+import Submitted from "./Component/submitted";
 
 
 function App() {
@@ -13,6 +14,10 @@ function App() {
         <Route 
         path='/submit-form' 
         element={<Form/>}
+        />
+        <Route
+        path='/result'
+        element={<Submitted/>}
         />
       </Routes>
    </Router>

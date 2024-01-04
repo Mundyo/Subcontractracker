@@ -2,9 +2,13 @@
 
 import React, { useState } from 'react';
 import './form.css';
+// import { useNavigate } from 'react-router-dom';
+import Submitted from './submitted';
 
 function Form() {
   const [selectedIssue, setSelectedIssue] = useState('');
+  const [submittedData, setSubmittedData] = useState(null);
+  // const navigate = useNavigate();
 
   const handleIssueChange = async (event) => {
     setSelectedIssue(event.target.value);
@@ -37,6 +41,19 @@ function Form() {
 
       if (response.ok) {
         console.log('Form submitted successfully!');
+
+       
+            
+          setSubmittedData(formData);
+
+        setTimeout(() => {
+          window.location.href = '/result';
+        }, 0);
+
+      
+       
+        // window.location.href = '/result';
+        // navigate('/result');
      
       } else {
         console.error('Form submission failed:', result.message);
@@ -50,6 +67,9 @@ function Form() {
   return (
      
     <div className='Container'>
+      {submittedData ? (
+        <Submitted submittedData={submittedData}/>
+      ) : (
        <form onSubmit={handleFormSubmit}>
           <h1> SubContract Production Order Issue Tracker</h1>
           <h3> Collect information on issues with Subcontract Production Order and Supplier QAD usage.</h3>
@@ -61,7 +81,7 @@ function Form() {
              <div className='form-group'>
                <label htmlFor='supplier'>Supplier:</label>
                <select id='supplier' name='supplier'>
-                 <option value='supplier1'>Curtis</option>
+                 <option value='Curtis'>Curtis</option>
                  <option value='supplier2'>Supplier 2</option>
                </select>
              </div>
@@ -151,6 +171,7 @@ function Form() {
               <button type='submit' >Submit</button>
             </div>
           </form>
+          )}
         </div>
   
   
