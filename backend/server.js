@@ -6,7 +6,7 @@ const morgan = require("morgan");
 const slugify = require('slugify');
 const DOMPurify = require('dompurify');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 
 
 
@@ -37,19 +37,18 @@ connectDB();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("tiny"));
-// app.use(express.static("public"));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-const transporter = nodemailer.createTransport({
+// const transporter = nodemailer.createTransport({
  
-  service: 'gmail',
-  auth: {
-    user: 'subcontractracker@gmail.com',
-    pass: 'chelseawalters'
-  }
-});
+//   service: 'gmail',
+//   auth: {
+//     user: 'subcontractracker@gmail.com',
+//     pass: 'chelseawalters'
+//   }
+// });
 
 app.post('/submit-form', async (req, res) => {
   try {
@@ -61,15 +60,15 @@ app.post('/submit-form', async (req, res) => {
     const formEntry = new FormModel(formData);
     await formEntry.save();
 
-    const mailOptions ={
+    // const mailOptions ={
 
-      from: 'subcontractracker@gmail.com',
-      to:   'cowalters@gmail.com',
-      subject: 'New Form Submission',
-      text: JSON.stringify(formData)
-    }
+    //   from: 'subcontractracker@gmail.com',
+    //   to:   'cowalters@gmail.com',
+    //   subject: 'New Form Submission',
+    //   text: JSON.stringify(formData)
+    // }
 
-    await transporter.sendMail(mailOptions);
+    // await transporter.sendMail(mailOptions);
 
     res.status(201).json({ message: 'Form submitted successfully' });
   } catch (error) {
