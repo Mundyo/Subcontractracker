@@ -39,7 +39,7 @@ function Form() {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     try {
-      const formData = { ...formValues, textArea: selectedIssue === 'other' ? formValues.textArea : '' };
+      const formData = { ...formValues, textArea: selectedIssue === 'other' ? formValues.textArea : null, };
          
          
           localStorage.setItem('submittedData', JSON.stringify(formData));
@@ -57,7 +57,7 @@ function Form() {
       if (response.ok) {
         console.log('Form submitted successfully!');
         setSubmittedData(formData);
-        // window.location.href = '/result';
+       
         navigate('/result');
 
       } else {
@@ -158,7 +158,7 @@ function Form() {
                     <textarea
                       id='textArea'
                       name='TextArea'
-                      rows='4'
+                      rows='2'
                       cols='50'
                       onChange={handleInputChange}
                     ></textarea>

@@ -1,7 +1,11 @@
 
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const DOMPurify = require('dompurify');
+
+
+const path = require('path');
+
+
 
 const formSchema = new mongoose.Schema({
   name: {
@@ -26,7 +30,9 @@ const formSchema = new mongoose.Schema({
   },
   textArea: {
   type: String
-
+  },
+  customTextAreaProcessing: {
+    type: String
   },
   createdAt: {
     type: Date,
@@ -44,13 +50,22 @@ const formSchema = new mongoose.Schema({
 formSchema.pre('validate', function(next) {
 if (this.name) {
   const timestamp= Date.now();
-  this.slug = slugify( `${this.title} -${timestamp}`, { lower: true, strict: true })
+  this.slug = slugify( `${this.name} -${timestamp}`, { lower: true, strict: true })
 };
 
-if (this.textArea) {
-  this.sanitizedHtml = DOMPurify.sanitize(this.description)
+if (this.textArea !== null && this.issue === 'other') {
+  
+  this.customTextAreaProcessing = this.textArea;
+
+  this.textArea = this.extArea;
 }
 
+ if (this.fileUpload) {
+
+  this.fileUpload = path.basename(this.fileUpload);
+ }
+
+ 
 next()
 })
 
