@@ -1,18 +1,39 @@
-import React from 'react'
 
-function submitted({ submittedData }) {
+
+import React, { useEffect, useState } from 'react';
+
+function Submitted({ submittedData }) {
+  const [savedData, setSavedData] = useState(null);
+
+  useEffect(() => {
+    const dataFromLocalStorage = JSON.parse(localStorage.getItem('submittedData'));
+    setSavedData(dataFromLocalStorage);
+  }, []);
+
+  useEffect(() => {
+    if (submittedData) {
+     
+    }
+  }, [submittedData]);
+
+  if (!savedData) {
+    return <div>Form Submitted ....</div>;
+  }
+
   return (
     <div className='container1'>
-       <h1> Subcontract Order Issue form submitted !!! </h1>
-    <div className='name'>
-       <p>Name: {submittedData.name} </p>
-       <p>Supplier: {submittedData.supplier} </p>
-       <p>Issue:{submittedData.issue}  </p>
-       <p>Subcontract Production Order ID:{submittedData.productionOrderId}  </p>
-       <p>Document Uploaded:{submittedData.fileUpload}  </p>
+      <h1>Subcontract Order Issue form submitted !!!</h1>
+      <div className='name'>
+        <>
+          <p>Name: {savedData.name} </p>
+          <p>Supplier: {savedData.supplier} </p>
+          <p>Issue: {savedData.issue} </p>
+          <p>Subcontract Production Order ID: {savedData.productionOrderId} </p>
+          <p>Document Uploaded: {savedData.fileUpload} </p>
+        </>
+      </div>
     </div>
-    </div>
-  )
+  );
 }
 
-export default submitted
+export default Submitted;

@@ -1,31 +1,48 @@
 
 
+
+
 import React, { useState } from 'react';
 import './form.css';
-// import { useNavigate } from 'react-router-dom';
 import Submitted from './submitted';
+import { useNavigate } from 'react-router-dom' ;
 
 function Form() {
-  const [selectedIssue, setSelectedIssue] = useState('');
-  const [submittedData, setSubmittedData] = useState(null);
-  // const navigate = useNavigate();
 
-  const handleIssueChange = async (event) => {
+  const navigate= useNavigate();
+  const [selectedIssue, setSelectedIssue] = useState('');
+  const [formValues, setFormValues] = useState({
+    name: '',
+    supplier: '',
+    issue: '',
+    productionOrderId: '',
+    fileUpload: '',
+    textArea: '',
+  });
+  const [submittedData, setSubmittedData] = useState(null);
+
+  const handleInputChange = (event) => {
+    const { id, value } = event.target;
+    if (id === 'supplier'){
+      setFormValues((prevValues) => ({ ...prevValues, supplier: value }));
+    } else {
+      setFormValues((prevValues) => ({ ...prevValues, [id]: value }));
+    }
+  };
+    
+
+  const handleIssueChange = (event) => {
     setSelectedIssue(event.target.value);
+    setFormValues((prevValues) => ({ ...prevValues, issue: event.target.value }));
   };
 
-
-    const handleFormSubmit = async (event) => {
-        event.preventDefault(); 
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
     try {
-      const formData = {
-        name: document.getElementById('name').value,
-        supplier: document.getElementById('supplier').value,
-        issue: document.querySelector('input[name="issue"]:checked').value,
-        productionOrderId: document.getElementById('productionOrderId').value,
-        fileUpload: document.getElementById('fileUpload').value,
-        textArea: selectedIssue === 'other' ? document.getElementById('textArea').value : '',
-      };
+      const formData = { ...formValues, textArea: selectedIssue === 'other' ? formValues.textArea : '' };
+         
+         
+          localStorage.setItem('submittedData', JSON.stringify(formData));
 
       const response = await fetch('http://localhost:3001/submit-form', {
         method: 'POST',
@@ -35,29 +52,16 @@ function Form() {
         body: JSON.stringify(formData),
       });
 
-      console.log(formData);
-
       const result = await response.json();
 
       if (response.ok) {
         console.log('Form submitted successfully!');
-
-       
-            
-          setSubmittedData(formData);
-
-        setTimeout(() => {
-          window.location.href = '/result';
-        }, 0);
-
-      
-       
+        setSubmittedData(formData);
         // window.location.href = '/result';
-        // navigate('/result');
-     
+        navigate('/result');
+
       } else {
         console.error('Form submission failed:', result.message);
-      
       }
     } catch (error) {
       console.error('Error creating form:', error.message);
@@ -65,32 +69,34 @@ function Form() {
   };
 
   return (
-     
     <div className='Container'>
       {submittedData ? (
-        <Submitted submittedData={submittedData}/>
+        <Submitted submittedData={submittedData} />
       ) : (
-       <form onSubmit={handleFormSubmit}>
-          <h1> SubContract Production Order Issue Tracker</h1>
-          <h3> Collect information on issues with Subcontract Production Order and Supplier QAD usage.</h3>
-             <div className='form-group'>
-               <label htmlFor='name'>Enter your name:</label>
-               <input type='text' id='name' name='name' />
-             </div>
-    
-             <div className='form-group'>
-               <label htmlFor='supplier'>Supplier:</label>
-               <select id='supplier' name='supplier'>
-                 <option value='Curtis'>Curtis</option>
-                 <option value='supplier2'>Supplier 2</option>
-               </select>
-             </div>
-    
-             <div className='form-group'>
-               <div className='form-group'>
-                 <label>Issue:</label>
-                 <div className='radio-group'>
-                   <div>
+        <form onSubmit={handleFormSubmit}>
+          <h1>SubContract Production Order Issue Tracker</h1>
+          <h3>Collect information on issues with Subcontract Production Order and Supplier QAD usage.</h3>
+
+          <div className='form-group'>
+            <label htmlFor='name'>Enter your name:</label>
+            <input type='text' id='name' name='name' onChange={handleInputChange} />
+          </div>
+
+          <div className='form-group'>
+            <label htmlFor='supplier'>Supplier:</label>
+            <select id='supplier' name='supplier' onChange={handleInputChange}>
+              <option value='Curtis'></option>
+              <option value='Curtis'>Curtis</option>
+              <option value='supplier2'>Supplier 2</option>
+            </select>
+          </div>
+
+          <div className='form-group'>
+            <div className='form-group'>
+              <label>Issue:</label>
+              <div className='radio-group'>
+            
+                    <div>
                      <input
                       type='radio'
                       id='missingMaterial'
@@ -145,36 +151,53 @@ function Form() {
                     <label htmlFor='other'>Other</label>
                   </div>
     
-                  {selectedIssue === 'other' && (
-                    <div className='comment-section'>
-                      <label htmlFor='comment'>Comments:</label>
-                      <textarea id='textArea' name='TextArea' rows='4' cols='50'></textarea>
-                    </div>
-                  )}
-                </div>
+             
+                {selectedIssue === 'other' && (
+                  <div className='comment-section'>
+                    <label htmlFor='comment'>Comments:</label>
+                    <textarea
+                      id='textArea'
+                      name='TextArea'
+                      rows='4'
+                      cols='50'
+                      onChange={handleInputChange}
+                    ></textarea>
+                  </div>
+                )}
               </div>
             </div>
-    
-            <div className='form-group'>
-              <label htmlFor='productionOrderId'>Subcontract Production Order ID:</label>
-              <input type='text' id='productionOrderId' name='productionOrderId' />
+          </div>
+
+          <div className='form-group'>
+            <label htmlFor='productionOrderId'>Subcontract Production Order ID:</label>
+            <input
+              type='text'
+              id='productionOrderId'
+              name='productionOrderId'
+              onChange={handleInputChange}
+            />
+          </div>
+
+          <div className='form-group'>
+            <label htmlFor='fileUpload'>Upload documents showing the issue (BOL or Subcontract Production Order):</label>
+            <div>
+              <input
+                type='file'
+                id='fileUpload'
+                name='fileUpload'
+                onChange={handleInputChange}
+              />
             </div>
-    
-            <div className='form-group'>
-              <label htmlFor='fileUpload'>Upload documents showing the issue (BOL or Subcontract Production Order):</label>
-              <div>
-                <input type='file' id='fileUpload' name='fileUpload' />
-              </div>
-            </div>
-    
-            <div className='form-group'>
-              <button type='submit' >Submit</button>
-            </div>
-          </form>
-          )}
-        </div>
-  
-  
-    )}
+          </div>
+
+          <div className='form-group'>
+            <button type='submit'>Submit</button>
+          </div>
+        </form>
+      )}
+    </div>
+  );
+}
 
 export default Form;
+
