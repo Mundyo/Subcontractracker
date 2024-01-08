@@ -13,8 +13,8 @@ const cors = require('cors');
 const app = express();
 const PORT = 3001;
 
-app.use(cors());
-// app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+// app.use(cors());
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
 
 
