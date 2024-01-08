@@ -15,7 +15,8 @@ const PORT = 3001;
 
 // app.use(cors());
 // app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
-const allowedOrigins = ['http://localhost:3000', 'https://subcontractracker-095b11d35777.herokuapp.com'];
+// const allowedOrigins = ['http://localhost:3000', 'https://subcontractracker-095b11d35777.herokuapp.com'];
+const allowedOrigins = ['http://localhost:3000', 'https://orderissuetracker-19f85e06e952.herokuapp.com'];
 
 app.use(cors({
   origin: function (origin, callback) {
