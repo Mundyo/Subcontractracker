@@ -7,18 +7,10 @@ function App() {
   return (
    < Router>
       <Routes>
-         <Route 
-         path='/'
-         element={<Navigate to="/submit-form" />} />
+        <Route path='/' element={<Navigate to="/submit-form" />} />
          
-        <Route 
-        path='/submit-form' 
-        element={<Form/>}
-        />
-        <Route
-        path='/result'
-        element={<Submitted/>}
-        />
+        <Route  path='/submit-form' element={<Form/>}/>
+        <Route  path='/result'      element={<Submitted/>} />
       </Routes>
    </Router>
   );

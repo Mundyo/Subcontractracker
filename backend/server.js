@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const slugify = require('slugify');
 const DOMPurify = require('dompurify');
 const cors = require('cors');
+const path = require('path');
 // const nodemailer = require('nodemailer');
 
 
@@ -15,7 +16,7 @@ const PORT = process.env.PORT || 3001;
 
 
 
-const allowedOrigins = ['http://localhost:3000', 'https://orderissuetracker-19f85e06e952.herokuapp.com', 'https://orderissuetracker.com'];
+// const allowedOrigins = ['http://localhost:3000', 'https://orderissuetracker-19f85e06e952.herokuapp.com', 'https://orderissuetracker.com'];
 
 // app.use(cors({
 //   origin: function (origin, callback) {
@@ -54,7 +55,7 @@ const connectDB = async () => {
 connectDB();
 
 
-
+app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("tiny"));
 app.use(express.json());
@@ -98,7 +99,9 @@ app.post('/submit-form', async (req, res) => {
 });
 
 
-
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname + '/client/build/index.html'));
+});
 
 
 
