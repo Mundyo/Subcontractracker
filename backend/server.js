@@ -55,7 +55,7 @@ const connectDB = async () => {
 connectDB();
 
 
-app.use(express.static(path.join(__dirname, 'client/build')));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("tiny"));
 app.use(express.json());
@@ -99,11 +99,11 @@ app.post('/submit-form', async (req, res) => {
 });
 
 
+app.use(express.static(path.join(__dirname,'..','build')));
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname + '/client/build/index.html'));
+  const indexPath = path.join(__dirname, '..', 'build', 'index.html');
+  res.sendFile(indexPath);
 });
-
-
 
 
 app.listen(PORT , () => {
